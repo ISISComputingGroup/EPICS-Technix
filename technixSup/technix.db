@@ -1,0 +1,184 @@
+
+record(ao, "$(P)VOLT:SP") {
+   field(DESC, "Sets the voltage")
+   field(DTYP, "stream")
+   field(EGU, "V")
+   field(OUT, "@devTechnix.proto set_voltage $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:VOLT:SP")
+   field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
+}
+
+alias("$(P)VOLT:SP","$(P)VOLT:SP:RBV")
+
+record(ai, "$(P)VOLT") {
+   field(DESC, "Gets the voltage")
+   field(DTYP, "stream")
+   field(EGU, "V")
+   field(INP, "@devTechnix.proto get_voltage $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:VOLT")
+   field(SDIS, "$(P)DISABLE")
+   field(SCAN, "1 second")
+   field(PREC, "1")
+   info(INTEREST, "HIGH")
+   info(archive, "VAL")
+}
+record(ao, "$(P)CURRENT:SP") {
+   field(DESC, "Sets the current)
+   field(DTYP, "stream")
+   field(EGU, "A")
+   field(OUT, "@devTechnix.proto set_current $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:CURRENT:SP")
+   field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
+}
+
+alias("$(P)CURRENT:SP","$(P)CURRENT:SP:RBV")
+
+record(ai, "$(P)CURRENT") {
+   field(DESC, "Gets the current")
+   field(DTYP, "stream")
+   field(EGU, "A")
+   field(INP, "@devTechnix.proto get_current $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:CURRENT")
+   field(SDIS, "$(P)DISABLE")
+   field(SCAN, "1 second")
+   field(PREC, "1")
+   info(INTEREST, "HIGH")
+   info(archive, "VAL")
+}
+record(ao, "$(P)HV_ON:SP") {
+   field(DESC, "Sets HV on")
+   field(DTYP, "stream")
+   field(OUT, "@devTechnix.proto set_hv_on $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:HV_ON:SP")
+   field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
+}
+record(ao, "$(P)HV_OFF:SP") {
+   field(DESC, "Sets HV off")
+   field(DTYP, "stream")
+   field(OUT, "@devTechnix.proto set_hv_off $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:HV_OFF:SP")
+   field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
+}
+record(bo, "$(P)LOCAL_MODE:SP") {
+   field(DESC, "Sets local/remote mode")
+   field(DTYP, "stream")
+   field(OUT, "@devTechnix.proto set_local_mode $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:LOCAL_MODE:SP")
+   field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
+   field(ZNAM, "REMOTE")
+   field(ONAM, "LOCAL")
+}
+record(bo, "$(P)INHIBIT:SP") {
+   field(DESC, "Sets inhibit active/idle")
+   field(DTYP, "stream")
+   field(OUT, "@devTechnix.proto set_inhibit $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:INHIBIT:SP")
+   field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
+   field(ZNAM, "IDLE")
+   field(ONAM, "ACTIVE")
+}
+record(longin, "$(P)MAINS") {
+   field(DESC, "Gets the mains information")
+   field(DTYP, "stream")
+   field(INP, "@devTechnix.proto get_mains_info $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:MAINS")
+   field(SDIS, "$(P)DISABLE")
+   field(SCAN, "1 second")
+   info(INTEREST, "HIGH")
+   info(archive, "VAL")
+}
+record(mbbiDirect, "$(P)STATUS") {
+    field(DESC, "Gets the image of the power supply logical status")
+    field(DTYP, "stream")
+    field(INP, "@devTechnix.proto get_status $(PORT)")
+    field(SCAN, "1 second")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:STATUS")
+    field(SDIS, "$(P)DISABLE")
+}
+record(bi, "$(P)REGULATION") {
+    field(DESC, "Gets the regulation of current/voltage")
+    field(INP, "$(P)STATUS.B0 CP")
+    field(ZNAM, "CURRENT")
+    field(ONAM, "VOLTAGE")
+}
+record(bi, "$(P)FAULT") {
+    field(DESC, "Gets if there is a fault")
+    field(INP, "$(P)STATUS.B1 CP")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+}
+record(bi, "$(P)INTERLOCK") {
+    field(DESC, "Gets the status of interlock")
+    field(INP, "$(P)STATUS.B2 CP")
+    field(ZNAM, "CLOSED")
+    field(ONAM, "OPEN")
+}
+
+record(bi, "$(P)HV:STATUS") {
+    field(DESC, "Gets the status of HV")
+    field(INP, "$(P)STATUS.B3 CP")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bo, "$(P)DISABLE")
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(VAL, "$(DISABLE=0)")
+    field(OMSL, "supervisory")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+}
+## SIMULATION STUFF ##
+record(bo, "$(P)SIM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(VAL, "$(RECSIM=0)")
+}
+alias("$(P)SIM", "$(P)SIM:SP")
+
+record(bo, "$(P)DISABLE")
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(VAL, "$(DISABLE=0)")
+    field(OMSL, "supervisory")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+}
+record(ai, "$(P)SIM:VOLT") {
+}
+alias("$(P)SIM:VOLT","$(P)SIM:VOLT:SP")
+alias("$(P)SIM:VOLT","$(P)SIM:VOLT:SP:RBV")
+
+record(ai, "$(P)SIM:CURRENT") {
+}
+alias("$(P)SIM:CURRENT","$(P)SIM:CURRENT:SP")
+alias("$(P)SIM:CURRENT","$(P)SIM:CURRENT:SP:RBV")
+
+record(longin, "$(P)SIM:MAINS"){
+}
+
+record(mbbiDirect, "$(P)SIM:STATUS"){
+}
+
