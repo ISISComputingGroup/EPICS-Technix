@@ -26,7 +26,7 @@ record(ai, "$(P)VOLT") {
    info(archive, "VAL")
 }
 record(ao, "$(P)CURRENT:SP") {
-   field(DESC, "Sets the current)
+   field(DESC, "Sets the current")
    field(DTYP, "stream")
    field(EGU, "A")
    field(OUT, "@devTechnix.proto set_current $(PORT)")
@@ -99,14 +99,16 @@ record(longin, "$(P)MAINS") {
    field(SIOL, "$(P)SIM:MAINS")
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "1 second")
+   field(PREC, "1")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
 record(mbbiDirect, "$(P)STATUS") {
-    field(DESC, "Gets the image of the power supply logical status")
+    field(DESC, "Gets image of power supply logical status")
     field(DTYP, "stream")
     field(INP, "@devTechnix.proto get_status $(PORT)")
     field(SCAN, "1 second")
+    field(PREC, "1")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:STATUS")
     field(SDIS, "$(P)DISABLE")
@@ -137,15 +139,6 @@ record(bi, "$(P)HV:STATUS") {
     field(ONAM, "ON")
 }
 
-record(bo, "$(P)DISABLE")
-{
-    field(DESC, "Disable comms")
-    field(PINI, "YES")
-    field(VAL, "$(DISABLE=0)")
-    field(OMSL, "supervisory")
-    field(ZNAM, "COMMS ENABLED")
-    field(ONAM, "COMMS DISABLED")
-}
 ## SIMULATION STUFF ##
 record(bo, "$(P)SIM")
 {

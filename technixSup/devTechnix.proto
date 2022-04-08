@@ -1,0 +1,46 @@
+OutTerminator = "\r";
+InTerminator = "\r";
+ReplyTimeout = 2000;
+
+set_voltage {
+    out "d1,%f";
+}
+get_voltage {
+    out "a1";
+    in "a1%f";
+}
+set_current {
+    out "d2,%f";
+}
+get_current {
+    out "a2";
+    in "a2%f";
+}
+set_hv_on {
+    out "P5,1";
+    in "P5,1";
+    wait 100;
+    out "P5,0";
+    in "P5,0";
+}
+set_hv_off {
+    out "P6,1";
+    in "P6,1";
+    wait 100;
+    out "P6,0";
+    in "P6,0";
+}
+set_local_mode {
+    out "P7,%d";
+}
+set_inhibit {
+    out "P8,%d";
+}
+get_mains_info {
+    out "F";
+    in "F00%d";
+}
+get_status {
+    out "E";
+    in "E%d";
+}

@@ -7,9 +7,9 @@ from lewis.utils.replies import conditional_reply
 @has_log
 class TechnixStreamInterface(StreamInterface):
     commands = {
-        CmdBuilder("set_voltage").escape("d1,").int().eos().build(),
+        CmdBuilder("set_voltage").escape("d1,").float().eos().build(),
         CmdBuilder("get_voltage").escape("a1").eos().build(),
-        CmdBuilder("set_current").escape("d2,").int().eos().build(),
+        CmdBuilder("set_current").escape("d2,").float().eos().build(),
         CmdBuilder("get_current").escape("a2").eos().build(),
         CmdBuilder("set_hv_on").escape("P5,").int().eos().build(),
         CmdBuilder("set_hv_off").escape("P6,").int().eos().build(),
@@ -19,28 +19,23 @@ class TechnixStreamInterface(StreamInterface):
         CmdBuilder("get_status").escape("E").eos().build(),
 
     }
-    OutTerminator = "\r";
-    InTerminator = "\r\n";
-    def __init__(self):
-        super(TechnixStreamInterface, self).__init__()
-        # Commands that we expect via serial during normal operation
-        self.commands = {
-            CmdBuilder(self.catch_all).arg("^#9.*$").build()  # Catch-all command for debugging
-        }
+
+    in_terminator = "\r"
+    out_terminator = "\r"
 
     def set_voltage(self, voltage_sp):
         self.device.voltage = voltage_sp
         print(f"Voltage: {voltage_sp}")
 
     def get_voltage(self):
-        return f"Voltage: {self.device.voltage}"
+        return f"a1{self.device.voltage}"
 
     def set_current(self, current_sp):
         self.device.current = current_sp
         print(f"Current: {current_sp}")
 
     def get_current(self):
-        return f"Current: {self.device.current}"
+        return f"a2{self.device.current}"
 
     def set_hv_on(self, hv_on_sp):
         self.device.hv_on = hv_on_sp
@@ -59,10 +54,10 @@ class TechnixStreamInterface(StreamInterface):
         print(f"Is inhibit mode: {inhibit_sp}")
 
     def get_mains(self):
-        return f"Mains information: {self.device.inhibit}"
+        return f"F00{self.device.inhibit}"
 
     def get_status(self):
-        return f"Image of the power supply logical status: {self.device.status}"
+        return f"E{self.device.status}"
 
     def handle_error(self, request, error):
         """

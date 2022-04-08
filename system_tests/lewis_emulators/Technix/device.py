@@ -11,8 +11,8 @@ class SimulatedTechnix(StateMachineDevice):
         """
         self.connected = True
         self.speed = 1
-        self.voltage = 0
-        self.current = 0
+        self.voltage = 0.0
+        self.current = 0.0
         self.hv_on = 0
         self.hv_off = 0
         self.local_mode = 0

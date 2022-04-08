@@ -13,7 +13,7 @@ IOCS = [
         "directory": get_default_ioc_dir("TECHNIX"),
         "macros": {},
         "emulator": "Technix",
-        "emulator_id": DEVICE_PREFIX,
+
     },
 ]
 
@@ -46,11 +46,13 @@ class TechnixTests(unittest.TestCase):
 
     @skip_if_recsim("Cannot catch errors in RECSIM")
     def test_WHEN_set_voltage_THEN_get_voltage_back_correctly(self):
-        self.ca.assert_setting_setpoint_sets_readback(10, "VOLT")
+        self.ca.set_pv_value("VOLT:SP", 10.0, wait=True)
+        self.ca.assert_that_pv_is("VOLT", 10.0)
 
     @skip_if_recsim("Cannot catch errors in RECSIM")
     def test_WHEN_set_current_THEN_get_current_back_correctly(self):
-        self.ca.assert_setting_setpoint_sets_readback(10, "CURRENT")
+        self.ca.set_pv_value("CURRENT:SP", 10.0, wait=True)
+        self.ca.assert_that_pv_is("CURRENT", 10.0)
 
     @skip_if_recsim("Cannot catch errors in RECSIM")
     def test_WHEN_set_local_mode_THEN_mode_is_local(self):
