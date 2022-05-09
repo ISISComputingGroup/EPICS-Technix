@@ -32,9 +32,11 @@ set_hv_off {
 }
 set_local_mode {
     out "P7,%d";
+    in "P7,%d";
 }
 set_inhibit {
     out "P8,%d";
+    in "P8,%d";
 }
 get_mains_info {
     out "F";

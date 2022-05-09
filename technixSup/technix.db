@@ -51,23 +51,25 @@ record(ai, "$(P)CURRENT") {
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
-record(ao, "$(P)HV_ON:SP") {
+record(bo, "$(P)HV_ON:SP") {
    field(DESC, "Sets HV on")
    field(DTYP, "stream")
    field(OUT, "@devTechnix.proto set_hv_on $(PORT)")
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:HV_ON:SP")
    field(SDIS, "$(P)DISABLE")
-   field(PREC, "1")
+   field(ZNAM, "ON")
+   field(ONAM, "OFF")
 }
-record(ao, "$(P)HV_OFF:SP") {
+record(bo, "$(P)HV_OFF:SP") {
    field(DESC, "Sets HV off")
    field(DTYP, "stream")
    field(OUT, "@devTechnix.proto set_hv_off $(PORT)")
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:HV_OFF:SP")
    field(SDIS, "$(P)DISABLE")
-   field(PREC, "1")
+   field(ZNAM, "ON")
+   field(ONAM, "OFF")
 }
 record(bo, "$(P)LOCAL_MODE:SP") {
    field(DESC, "Sets local/remote mode")
@@ -76,7 +78,6 @@ record(bo, "$(P)LOCAL_MODE:SP") {
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:LOCAL_MODE:SP")
    field(SDIS, "$(P)DISABLE")
-   field(PREC, "1")
    field(ZNAM, "REMOTE")
    field(ONAM, "LOCAL")
 }
@@ -87,7 +88,6 @@ record(bo, "$(P)INHIBIT:SP") {
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:INHIBIT:SP")
    field(SDIS, "$(P)DISABLE")
-   field(PREC, "1")
    field(ZNAM, "IDLE")
    field(ONAM, "ACTIVE")
 }
@@ -99,22 +99,20 @@ record(longin, "$(P)MAINS") {
    field(SIOL, "$(P)SIM:MAINS")
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "1 second")
-   field(PREC, "1")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
 record(mbbiDirect, "$(P)STATUS") {
-    field(DESC, "Gets image of power supply logical status")
+    field(DESC, "Gets logical status")
     field(DTYP, "stream")
     field(INP, "@devTechnix.proto get_status $(PORT)")
     field(SCAN, "1 second")
-    field(PREC, "1")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:STATUS")
     field(SDIS, "$(P)DISABLE")
 }
 record(bi, "$(P)REGULATION") {
-    field(DESC, "Gets the regulation of current/voltage")
+    field(DESC, "Regulation of curr/volt")
     field(INP, "$(P)STATUS.B0 CP")
     field(ZNAM, "CURRENT")
     field(ONAM, "VOLTAGE")
@@ -137,6 +135,13 @@ record(bi, "$(P)HV:STATUS") {
     field(INP, "$(P)STATUS.B3 CP")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
+}
+
+record(bi, "$(P)LOCAL_MODE") {
+    field(DESC, "Gets if device is in local mode")
+    field(INP, "$(P)STATUS.B6 CP")
+    field(ZNAM, "REMOTE")
+    field(ONAM, "LOCAL")
 }
 
 ## SIMULATION STUFF ##
@@ -173,5 +178,9 @@ record(longin, "$(P)SIM:MAINS"){
 }
 
 record(mbbiDirect, "$(P)SIM:STATUS"){
+}
+record(bo, "$(P)SIM:HV_ON:SP"){
+}
+record(bo, "$(P)SIM:HV_OFF:SP"){
 }
 

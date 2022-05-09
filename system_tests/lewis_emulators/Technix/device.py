@@ -19,6 +19,10 @@ class SimulatedTechnix(StateMachineDevice):
         self.inhibit = 0
         self.mains = 0
         self.status = 0
+        self.interlock = 0
+        self.fault_status = 0
+        self.hv_status = 0
+
 
         # When the device is in an error state it can respond with junk
         self.is_giving_errors = False

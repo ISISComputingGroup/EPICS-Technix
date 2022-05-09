@@ -26,6 +26,7 @@ class TechnixStreamInterface(StreamInterface):
     def set_voltage(self, voltage_sp):
         self.device.voltage = voltage_sp
         print(f"Voltage: {voltage_sp}")
+        return f"d1,{voltage_sp}"
 
     def get_voltage(self):
         return f"a1{self.device.voltage}"
@@ -38,26 +39,43 @@ class TechnixStreamInterface(StreamInterface):
         return f"a2{self.device.current}"
 
     def set_hv_on(self, hv_on_sp):
+        if hv_on_sp == 0 and self.device.hv_on == 1:
+            self.device.hv_status = 1
         self.device.hv_on = hv_on_sp
         print(f"HV is on: {hv_on_sp}")
+        return f"P5,{hv_on_sp}"
 
     def set_hv_off(self, hv_off_sp):
+        if hv_off_sp == 0 and self.device.hv_off == 1:
+            self.device.hv_status = 0
         self.device.hv_off = hv_off_sp
         print(f"HV is off: {hv_off_sp}")
+        return f"P6,{hv_off_sp}"
+
+    def get_hv_status(self):
+        return self.device.hv_status
 
     def set_local_mode(self, local_mode_sp):
         self.device.local_mode = local_mode_sp
-        print(f"Local mode is on: {local_mode_sp}")
+        print(f"Local mode is: {local_mode_sp}")
 
     def set_inhibit(self, inhibit_sp):
         self.device.inhbit = inhibit_sp
         print(f"Is inhibit mode: {inhibit_sp}")
 
+    def get_interlock(self):
+        return self.device.interlock
+
+    def get_fault_status(self):
+        return self.device.fault_status
+
     def get_mains(self):
         return f"F00{self.device.inhibit}"
 
     def get_status(self):
-        return f"E{self.device.status}"
+
+        status = (self.device.fault_status * 2) + (self.device.interlock * 4) + (self.device.hv_status * 8) + (self.device.local_mode * 64)
+        return f"E{status}"
 
     def handle_error(self, request, error):
         """
