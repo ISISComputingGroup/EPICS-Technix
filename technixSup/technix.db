@@ -1,12 +1,27 @@
 
+record(ai, "$(P)_VRAW") {
+   field(DESC, "Gets the voltage")
+   field(DTYP, "stream")
+   field(EGU, "V")
+   field(INP, "@devTechnix.proto get_voltage $(PORT)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:VOLT")
+   field(SDIS, "$(P)DISABLE")
+   field(SCAN, "1 second")
+   field(PREC, "1")
+}
 record(ao, "$(P)VOLT:SP") {
    field(DESC, "Sets the voltage")
    field(DTYP, "stream")
    field(EGU, "V")
    field(OUT, "@devTechnix.proto set_voltage $(PORT)")
+   field(LINR, "LINEAR")
+   field(ASLO, "4095")
+   field(ESLO, "$(MAX_VOLT)")
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:VOLT:SP")
    field(SDIS, "$(P)DISABLE")
+   field(PREC, "1")
    field(PREC, "1")
 }
 
@@ -17,6 +32,9 @@ record(ai, "$(P)VOLT") {
    field(DTYP, "stream")
    field(EGU, "V")
    field(INP, "@devTechnix.proto get_voltage $(PORT)")
+   field(LINR, "LINEAR")
+   field(ASLO, "0.0002442")
+   field(ESLO, "$(MAX_VOLT)")
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:VOLT")
    field(SDIS, "$(P)DISABLE")
@@ -30,6 +48,9 @@ record(ao, "$(P)CURRENT:SP") {
    field(DTYP, "stream")
    field(EGU, "A")
    field(OUT, "@devTechnix.proto set_current $(PORT)")
+   field(LINR, "LINEAR")
+   field(ASLO, "4095")
+   field(ESLO, "$(MAX_CURR)")
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:CURRENT:SP")
    field(SDIS, "$(P)DISABLE")
@@ -38,7 +59,7 @@ record(ao, "$(P)CURRENT:SP") {
 
 alias("$(P)CURRENT:SP","$(P)CURRENT:SP:RBV")
 
-record(ai, "$(P)CURRENT") {
+record(ai, "$(P)_CRAW") {
    field(DESC, "Gets the current")
    field(DTYP, "stream")
    field(EGU, "A")
@@ -48,9 +69,25 @@ record(ai, "$(P)CURRENT") {
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "1 second")
    field(PREC, "1")
+}
+
+record(ai, "$(P)CURRENT") {
+   field(DESC, "Gets the current")
+   field(DTYP, "stream")
+   field(EGU, "A")
+   field(INP, "@devTechnix.proto get_current $(PORT)")
+   field(LINR, "LINEAR")
+   field(ASLO, "0.0002442")
+   field(ESLO, "$(MAX_CURR)")
+   field(SIML, "$(P)SIM")
+   field(SIOL, "$(P)SIM:CURRENT")
+   field(SDIS, "$(P)DISABLE")
+   field(SCAN, "1 second")
+   field(PREC, "1")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
+
 record(bo, "$(P)HV_ON:SP") {
    field(DESC, "Sets HV on")
    field(DTYP, "stream")
@@ -166,6 +203,7 @@ record(bo, "$(P)DISABLE")
 }
 record(ai, "$(P)SIM:VOLT") {
 }
+
 alias("$(P)SIM:VOLT","$(P)SIM:VOLT:SP")
 alias("$(P)SIM:VOLT","$(P)SIM:VOLT:SP:RBV")
 
