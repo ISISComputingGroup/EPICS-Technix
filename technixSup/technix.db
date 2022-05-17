@@ -181,6 +181,21 @@ record(bi, "$(P)LOCAL_MODE") {
     field(ONAM, "LOCAL")
 }
 
+record(bi, "$(P)INHIBIT") {
+    field(DESC, "Gets inhibit status")
+    field(INP, "$(P)STATUS.B7 CP")
+    field(ZNAM, "IDLE")
+    field(ONAM, "ACTIVE")
+}
+
+record(bi, "$(P)VOLT_CURR_REG") {
+    field(DESC, "Gets voltage/current regulation")
+    field(INP, "$(P)STATUS.B0 CP")
+    field(ZNAM, "CURRENT")
+    field(ONAM, "VOLTAGE")
+}
+
+
 ## SIMULATION STUFF ##
 record(bo, "$(P)SIM")
 {
