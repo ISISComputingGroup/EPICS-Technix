@@ -3,24 +3,24 @@ InTerminator = "\r";
 ReplyTimeout = 2000;
 
 set_voltage {
-   out "d1,%f";
+   out "d1,%d";
    wait 100;
-   in "d1,%*f";
+   in "d1,%*d";
 }
 get_voltage {
     out "a1";
     wait 100;
-    in "a1%f";
+    in "a1%d";
 }
 set_current {
-    out "d2,%f";
+    out "d2,%d";
     wait 100;
-    in "d2,%*f";
+    in "d2,%*d";
 }
 get_current {
     out "a2";
     wait 100;
-    in "a2%f";
+    in "a2%d";
 }
 set_hv_on {
     out "P5,1";
