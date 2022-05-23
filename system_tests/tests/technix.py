@@ -11,7 +11,10 @@ IOCS = [
     {
         "name": DEVICE_PREFIX,
         "directory": get_default_ioc_dir("TECHNIX"),
-        "macros": {},
+        "macros": {
+            "MAX_VOLT": "10",
+            "MAX_CURR": "10",
+        },
         "emulator": "Technix",
 
     },
@@ -48,7 +51,7 @@ class TechnixTests(unittest.TestCase):
     def test_WHEN_set_voltage_THEN_get_voltage_back_correctly(self):
         max_volt = self.ca.get_pv_value("VOLT:SP.DRVH")
         self.ca.set_pv_value("VOLT:SP", max_volt, wait=True)
-        self.ca.assert_that_pv_is_number("VOLT", max_volt)
+        self.ca.assert_that_pv_is_number("VOLT", max_volt, 0.1)
         # as we have set max voltage, ADC should be full range
         self.ca.assert_that_pv_is("_VRAW.RVAL", 4095)
 
@@ -56,7 +59,7 @@ class TechnixTests(unittest.TestCase):
     def test_WHEN_set_current_THEN_get_current_back_correctly(self):
         max_curr = self.ca.get_pv_value("CURRENT:SP.DRVH")
         self.ca.set_pv_value("CURRENT:SP", max_curr, wait=True)
-        self.ca.assert_that_pv_is_number("CURRENT", max_curr)
+        self.ca.assert_that_pv_is_number("CURRENT", max_curr, 0.1)
         # as we have set max current, ADC should be full range
         self.ca.assert_that_pv_is("_CRAW.RVAL", 4095)
 
