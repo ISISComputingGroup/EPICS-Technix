@@ -70,7 +70,7 @@ class TechnixStreamInterface(StreamInterface):
         return self.device.fault_status
 
     def get_mains(self):
-        return f"F00{self.device.inhibit}"
+        return f"F00{self.device.mains}"
 
     def get_status(self):
 
