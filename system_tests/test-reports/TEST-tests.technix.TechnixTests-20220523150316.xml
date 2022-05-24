@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.technix.TechnixTests-20220523150316" tests="6" file="tests/technix.py" time="13.014" timestamp="2022-05-23T15:03:36" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.technix.TechnixTests" name="test_WHEN_set_current_THEN_get_current_back_correctly" time="3.307" timestamp="2022-05-23T15:03:26" file="tests\technix.py" line="58"/>
-	<testcase classname="tests.technix.TechnixTests" name="test_WHEN_set_inhibit_to_active_THEN_inhibit_is_active" time="1.124" timestamp="2022-05-23T15:03:28" file="tests\technix.py" line="81"/>
-	<testcase classname="tests.technix.TechnixTests" name="test_WHEN_set_inhibit_to_idle_THEN_inhibit_is_idle" time="1.033" timestamp="2022-05-23T15:03:29" file="tests\technix.py" line="76"/>
-	<testcase classname="tests.technix.TechnixTests" name="test_WHEN_set_local_mode_THEN_mode_is_local" time="1.095" timestamp="2022-05-23T15:03:30" file="tests\technix.py" line="66"/>
-	<testcase classname="tests.technix.TechnixTests" name="test_WHEN_set_remote_mode_THEN_mode_is_remote" time="1.031" timestamp="2022-05-23T15:03:31" file="tests\technix.py" line="71"/>
-	<testcase classname="tests.technix.TechnixTests" name="test_WHEN_set_voltage_THEN_get_voltage_back_correctly" time="5.423" timestamp="2022-05-23T15:03:36" file="tests\technix.py" line="50"/>
-</testsuite>
