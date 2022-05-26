@@ -59,7 +59,7 @@ class TechnixStreamInterface(StreamInterface):
         self.device.local_mode = local_mode_sp
         print(f"Local mode is: {local_mode_sp}")
 
-    def get_inhibit(self, inhibit_sp):
+    def set_inhibit(self, inhibit_sp):
         self.device.inhibit = inhibit_sp
         print(f"Is inhibit mode: {inhibit_sp}")
 
