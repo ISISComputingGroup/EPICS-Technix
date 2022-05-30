@@ -232,13 +232,18 @@ record(ai, "$(P)SIM:CURRENT") {
 alias("$(P)SIM:CURRENT","$(P)SIM:CURRENT:SP")
 alias("$(P)SIM:CURRENT","$(P)SIM:CURRENT:SP:RBV")
 
-record(longin, "$(P)SIM:MAINS"){
-}
-
-record(mbbiDirect, "$(P)SIM:STATUS"){
-}
 record(bo, "$(P)SIM:HV_ON:SP"){
 }
 record(bo, "$(P)SIM:HV_OFF:SP"){
+}
+record(bo, "$(P)SIM:INHIBIT:SP"){
+}
+record(bo, "$(P)LOCAL_MODE:SP"){
+}
+record(bo, "$(P)SIM:INHIBIT:SP") {
+}
+record(longin, "$(P)SIM:MAINS"){
+}
+record(mbbiDirect, "$(P)SIM:STATUS"){
 }
 

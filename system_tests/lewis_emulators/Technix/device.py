@@ -17,7 +17,6 @@ class SimulatedTechnix(StateMachineDevice):
         self.hv_off = 0
         self.local_mode = 0
         self.inhibit = 0
-        self.inhibit_status = 0
         self.mains = 0
         self.status = 0
         self.interlock = 0

@@ -61,10 +61,8 @@ class TechnixStreamInterface(StreamInterface):
 
     def set_inhibit(self, inhibit_sp):
         self.device.inhibit = inhibit_sp
-        print(f"Is inhibit mode: {inhibit_sp}")
-
-    def get_inhibit_status(self):
-        return self.device.inhibit_status
+        print(f"Inhibit mode: {inhibit_sp}")
+        return f"P8,{inhibit_sp}"
 
     def get_interlock(self):
         return self.device.interlock
@@ -77,7 +75,7 @@ class TechnixStreamInterface(StreamInterface):
 
     def get_status(self):
 
-        status = (self.device.fault_status * 2) + (self.device.interlock * 4) + (self.device.hv_status * 8) + (self.device.local_mode * 64) + (self.device.inhibit_status * 128)
+        status = (self.device.fault_status * 2) + (self.device.interlock * 4) + (self.device.hv_status * 8) + (self.device.local_mode * 64) + (self.device.inhibit * 128)
         return f"E{status}"
 
     def handle_error(self, request, error):
