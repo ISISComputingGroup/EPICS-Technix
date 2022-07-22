@@ -10,7 +10,6 @@ class SimulatedTechnix(StateMachineDevice):
         Initialize all of the device's attributes.
         """
         self.connected = True
-        self.speed = 1
         self.voltage = 0.0
         self.current = 0.0
         self.hv_on = 0
@@ -22,12 +21,6 @@ class SimulatedTechnix(StateMachineDevice):
         self.interlock = 0
         self.fault_status = 0
         self.hv_status = 0
-
-
-        # When the device is in an error state it can respond with junk
-        self.is_giving_errors = False
-        self.out_error = "}{<7f>w"
-        self.out_terminator_in_error = ""
 
     def _get_state_handlers(self):
         return {

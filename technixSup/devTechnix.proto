@@ -23,6 +23,19 @@ get_current {
     in "a2%d";
 }
 set_hv_on {
+    # From hardware testing: need to set local mode then remote mode
+    # first, before PSU can be turned on.
+
+    # Set local mode
+    out "P7,0";
+    in "P7,0";
+    wait 100;
+
+    # Set remote mode
+    out "P7,1";
+    in "P7,1";
+    wait 100;
+
     out "P5,1";
     wait 100;
     in "P5,1";
@@ -50,7 +63,7 @@ set_inhibit {
     wait 100;
     in "P8,%d";
 }
-get_mains_info {
+get_arc_info {
     out "F";
     wait 100;
     in "F00%d";
