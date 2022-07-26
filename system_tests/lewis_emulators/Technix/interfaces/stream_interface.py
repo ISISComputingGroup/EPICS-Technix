@@ -23,21 +23,27 @@ class TechnixStreamInterface(StreamInterface):
     in_terminator = "\r"
     out_terminator = "\r"
 
+    @conditional_reply("connected")
     def set_voltage(self, voltage_sp):
         self.device.voltage = voltage_sp
         print(f"Voltage: {voltage_sp}")
-        return f"d1,{voltage_sp}"
+        return f"d1,{int(voltage_sp)}"
 
+    @conditional_reply("connected")
     def get_voltage(self):
-        return f"a1{self.device.voltage}"
+        return f"a1{int(self.device.voltage)}"
 
+    @conditional_reply("connected")
     def set_current(self, current_sp):
         self.device.current = current_sp
-        print(f"Current: {current_sp}")
+        print(f"Current: {int(current_sp)}")
+        return f"d2,{int(current_sp)}"
 
+    @conditional_reply("connected")
     def get_current(self):
-        return f"a2{self.device.current}"
+        return f"a2{int(self.device.current)}"
 
+    @conditional_reply("connected")
     def set_hv_on(self, hv_on_sp):
         if hv_on_sp == 0 and self.device.hv_on == 1:
             self.device.hv_status = 1
@@ -45,6 +51,7 @@ class TechnixStreamInterface(StreamInterface):
         print(f"HV is on: {hv_on_sp}")
         return f"P5,{hv_on_sp}"
 
+    @conditional_reply("connected")
     def set_hv_off(self, hv_off_sp):
         if hv_off_sp == 0 and self.device.hv_off == 1:
             self.device.hv_status = 0
@@ -52,27 +59,34 @@ class TechnixStreamInterface(StreamInterface):
         print(f"HV is off: {hv_off_sp}")
         return f"P6,{hv_off_sp}"
 
+    @conditional_reply("connected")
     def get_hv_status(self):
         return self.device.hv_status
 
+    @conditional_reply("connected")
     def set_local_mode(self, local_mode_sp):
         self.device.local_mode = local_mode_sp
         print(f"Local mode is: {local_mode_sp}")
 
+    @conditional_reply("connected")
     def set_inhibit(self, inhibit_sp):
         self.device.inhibit = inhibit_sp
         print(f"Inhibit mode: {inhibit_sp}")
         return f"P8,{inhibit_sp}"
 
+    @conditional_reply("connected")
     def get_interlock(self):
         return self.device.interlock
 
+    @conditional_reply("connected")
     def get_fault_status(self):
         return self.device.fault_status
 
+    @conditional_reply("connected")
     def get_mains(self):
-        return f"F00{self.device.mains}"
+        return f"F{int(self.device.mains):03d}"
 
+    @conditional_reply("connected")
     def get_status(self):
 
         status = (self.device.fault_status * 2) + (self.device.interlock * 4) + (self.device.hv_status * 8) + (self.device.local_mode * 64) + (self.device.inhibit * 128)

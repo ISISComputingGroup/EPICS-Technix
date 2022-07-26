@@ -13,7 +13,7 @@ record(ai, "$(P)_VRAW") {
 record(ao, "$(P)VOLT:SP") {
    field(DESC, "Sets the voltage")
    field(DTYP, "stream")
-   field(EGU, "V")
+   field(EGU, "kV")
    field(OUT, "@devTechnix.proto set_voltage $(PORT)")
    field(LINR, "LINEAR")
    field(ASLO, "0.0002442")
@@ -23,7 +23,7 @@ record(ao, "$(P)VOLT:SP") {
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:VOLT:SP")
    field(SDIS, "$(P)DISABLE")
-   field(PREC, "1")
+   field(PREC, "3")
 }
 
 alias("$(P)VOLT:SP","$(P)VOLT:SP:RBV")
@@ -31,8 +31,8 @@ alias("$(P)VOLT:SP","$(P)VOLT:SP:RBV")
 record(ai, "$(P)VOLT") {
    field(DESC, "Gets the voltage")
    field(DTYP, "Raw Soft Channel")
-   field(EGU, "V")
-   field(INP, "$(P)_VRAW.RVAL CP")
+   field(EGU, "kV")
+   field(INP, "$(P)_VRAW CP MSS")
    field(LINR, "LINEAR")
    field(ASLO, "0.0002442")
    field(ESLO, "$(MAX_VOLT)")
@@ -40,14 +40,14 @@ record(ai, "$(P)VOLT") {
    field(SIOL, "$(P)SIM:VOLT")
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "Passive")
-   field(PREC, "1")
+   field(PREC, "3")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
 record(ao, "$(P)CURRENT:SP") {
    field(DESC, "Sets the current")
    field(DTYP, "stream")
-   field(EGU, "A")
+   field(EGU, "mA")
    field(OUT, "@devTechnix.proto set_current $(PORT)")
    field(LINR, "LINEAR")
    field(ASLO, "0.0002442")
@@ -57,7 +57,7 @@ record(ao, "$(P)CURRENT:SP") {
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:CURRENT:SP")
    field(SDIS, "$(P)DISABLE")
-   field(PREC, "1")
+   field(PREC, "3")
 }
 
 alias("$(P)CURRENT:SP","$(P)CURRENT:SP:RBV")
@@ -65,20 +65,20 @@ alias("$(P)CURRENT:SP","$(P)CURRENT:SP:RBV")
 record(ai, "$(P)_CRAW") {
    field(DESC, "Gets the current")
    field(DTYP, "stream")
-   field(EGU, "A")
+   field(EGU, "mA")
    field(INP, "@devTechnix.proto get_current $(PORT)")
    field(SIML, "$(P)SIM")
    field(SIOL, "$(P)SIM:CURRENT")
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "1 second")
-   field(PREC, "1")
+   field(PREC, "3")
 }
 
 record(ai, "$(P)CURRENT") {
    field(DESC, "Gets the current")
    field(DTYP, "Raw Soft Channel")
-   field(EGU, "A")
-   field(INP, "$(P)_CRAW.RVAL CP")
+   field(EGU, "mA")
+   field(INP, "$(P)_CRAW CP MSS")
    field(LINR, "LINEAR")
    field(ASLO, "0.0002442")
    field(ESLO, "$(MAX_CURR)")
@@ -131,16 +131,16 @@ record(bo, "$(P)INHIBIT:SP") {
    field(ZNAM, "IDLE")
    field(ONAM, "ACTIVE")
 }
-record(bi, "$(P)MAINS") {
-   field(DESC, "Gets the mains information")
+record(bi, "$(P)ARC") {
+   field(DESC, "Gets arc information")
    field(DTYP, "stream")
-   field(INP, "@devTechnix.proto get_mains_info $(PORT)")
+   field(INP, "@devTechnix.proto get_arc_info $(PORT)")
    field(SIML, "$(P)SIM")
-   field(SIOL, "$(P)SIM:MAINS")
+   field(SIOL, "$(P)SIM:ARC")
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "1 second")
-   field(ZNAM, "DEFECTIVE")
-   field(ONAM, "CORRECT")
+   field(ZNAM, "No arc present")
+   field(ONAM, "Arc present")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
@@ -155,47 +155,47 @@ record(mbbiDirect, "$(P)STATUS") {
 }
 record(bi, "$(P)REGULATION") {
     field(DESC, "Regulation of curr/volt")
-    field(INP, "$(P)STATUS.B0 CP")
+    field(INP, "$(P)STATUS.B0 CP MSS")
     field(ZNAM, "CURRENT")
     field(ONAM, "VOLTAGE")
 }
 record(bi, "$(P)FAULT") {
     field(DESC, "Gets if there is a fault")
-    field(INP, "$(P)STATUS.B1 CP")
+    field(INP, "$(P)STATUS.B1 CP MSS")
     field(ZNAM, "NO")
     field(ONAM, "YES")
 }
 record(bi, "$(P)INTERLOCK") {
     field(DESC, "Gets the status of interlock")
-    field(INP, "$(P)STATUS.B2 CP")
+    field(INP, "$(P)STATUS.B2 CP MSS")
     field(ZNAM, "CLOSED")
     field(ONAM, "OPEN")
 }
 
 record(bi, "$(P)HV:STATUS") {
     field(DESC, "Gets the status of HV")
-    field(INP, "$(P)STATUS.B3 CP")
+    field(INP, "$(P)STATUS.B3 CP MSS")
     field(ZNAM, "OFF")
     field(ONAM, "ON")
 }
 
 record(bi, "$(P)LOCAL_MODE") {
     field(DESC, "Gets if device is in local mode")
-    field(INP, "$(P)STATUS.B6 CP")
+    field(INP, "$(P)STATUS.B6 CP MSS")
     field(ZNAM, "REMOTE")
     field(ONAM, "LOCAL")
 }
 
 record(bi, "$(P)INHIBIT") {
     field(DESC, "Gets inhibit status")
-    field(INP, "$(P)STATUS.B7 CP")
+    field(INP, "$(P)STATUS.B7 CP MSS")
     field(ZNAM, "IDLE")
     field(ONAM, "ACTIVE")
 }
 
 record(bi, "$(P)VOLT_CURR_REG") {
     field(DESC, "Gets voltage/current regulation")
-    field(INP, "$(P)STATUS.B0 CP")
+    field(INP, "$(P)STATUS.B0 CP MSS")
     field(ZNAM, "CURRENT")
     field(ONAM, "VOLTAGE")
 }
@@ -242,7 +242,7 @@ record(bo, "$(P)LOCAL_MODE:SP"){
 }
 record(bo, "$(P)SIM:INHIBIT:SP") {
 }
-record(longin, "$(P)SIM:MAINS"){
+record(longin, "$(P)SIM:ARC"){
 }
 record(mbbiDirect, "$(P)SIM:STATUS"){
 }

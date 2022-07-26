@@ -50,7 +50,7 @@ set_inhibit {
     wait 100;
     in "P8,%d";
 }
-get_mains_info {
+get_arc_info {
     out "F";
     wait 100;
     in "F00%d";
