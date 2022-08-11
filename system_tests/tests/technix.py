@@ -115,8 +115,7 @@ class TechnixTests(unittest.TestCase):
     @skip_if_recsim("Need emulator to test disconnected behaviour")
     def test_WHEN_device_disconnected_THEN_records_are_in_alarm(self, _, record):
         self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.NONE)
-
         with self._lewis.backdoor_simulate_disconnected_device():
             self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.INVALID)
-
+        # Assert alarms clear on reconnection
         self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.NONE)
