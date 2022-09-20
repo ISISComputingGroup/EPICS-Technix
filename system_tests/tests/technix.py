@@ -108,14 +108,6 @@ class TechnixTests(unittest.TestCase):
         self.ca.assert_that_pv_is("_CRAW", int((1.23456/4.)*4095))
         self.ca.assert_that_pv_is_number("CURRENT", 1.23456, tolerance=0.001)
 
-    @contextlib.contextmanager
-    def _disconnect_device(self):
-        self._lewis.backdoor_set_on_device("connected", False)
-        try:
-            yield
-        finally:
-            self._lewis.backdoor_set_on_device("connected", True)
-
     @parameterized.expand(parameterized_list([
         "VOLT", "CURRENT", "HV:STATUS", "LOCAL_MODE",
         "INTERLOCK", "FAULT", "INHIBIT", "ARC", "VOLT_CURR_REG"
@@ -123,8 +115,7 @@ class TechnixTests(unittest.TestCase):
     @skip_if_recsim("Need emulator to test disconnected behaviour")
     def test_WHEN_device_disconnected_THEN_records_are_in_alarm(self, _, record):
         self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.NONE)
-
-        with self._disconnect_device():
+        with self._lewis.backdoor_simulate_disconnected_device():
             self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.INVALID)
-
+        # Assert alarms clear on reconnection
         self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.NONE)
