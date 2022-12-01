@@ -49,6 +49,10 @@ class TechnixTests(unittest.TestCase):
     def setUp(self):
         self._lewis, self._ioc = get_running_lewis_and_ioc("Technix", DEVICE_PREFIX)
         self.ca = ChannelAccess(device_prefix=DEVICE_PREFIX, default_timeout=10)
+        self.ca.set_pv_value("CURR:HLM", self.ca.get_pv_value("CURRENT:SP.DRVH"))
+        self.ca.set_pv_value("CURR:LLM", -1)
+        self.ca.set_pv_value("VOLT:HLM", self.ca.get_pv_value("VOLT:SP.DRVH"))
+        self.ca.set_pv_value("VOLT:LLM", -1)
 
     @skip_if_recsim("Cannot catch errors in RECSIM")
     def test_WHEN_set_voltage_THEN_get_voltage_back_correctly(self):
@@ -57,6 +61,39 @@ class TechnixTests(unittest.TestCase):
         self.ca.assert_that_pv_is_number("VOLT", max_volt, tolerance=0.1)
         # as we have set max voltage, ADC should be full range
         self.ca.assert_that_pv_is("_VRAW.RVAL", 4095)
+    
+    @parameterized.expand([
+        ("current_within_limits", 1, 0.5, 0, 0, "CURRENT", "No"),
+        ("current_outside_limits", 0.5, 1, 1, 2,"CURRENT", "CURR LIMIT"),
+        ("volt_within_limits", 1, 0.5, 0, 0, "VOLT", "No"),
+        ("volt_outside_limits", 0.5, 1, 1, 1,"VOLT", "VOLT LIMIT"),
+    ])
+    @skip_if_recsim("Cannot catch errors in RECSIM")
+    def test_WHEN_setpoint_set_AND_limits_set_THEN_limit_correct(self, _, limit, set, limit_status, summary_limit_status, type, limit_enum):
+        max = self.ca.get_pv_value(f"{type}:SP.DRVH")
+        self.ca.set_pv_value(f"{type[:4]}:HLM", max*limit)
+        self.ca.set_pv_value(f"{type[:4]}:LLM", 0)
+        self.ca.set_pv_value(f"{type}:SP", max*set)
+        self.ca.assert_that_pv_is_number(f"{type}", max*set, tolerance=0.1)
+        self.ca.assert_that_pv_is(f"{type[:4]}:LIMIT", limit_status)
+        self.ca.assert_that_pv_is("LIMIT", summary_limit_status)
+        self.ca.assert_that_pv_is("LIMIT:ENUM", limit_enum)
+
+    @skip_if_recsim("Cannot catch errors in RECSIM")
+    def test_WHEN_both_outside_limits_THEN_both_limit(self):
+        max_current = self.ca.get_pv_value("CURRENT:SP.DRVH")
+        max_volt = self.ca.get_pv_value("VOLT:SP.DRVH")
+        self.ca.set_pv_value("CURR:HLM", max_current/2)
+        self.ca.set_pv_value("CURR:LLM", 0)
+        self.ca.set_pv_value("VOLT:HLM", max_volt/2)
+        self.ca.set_pv_value("VOLT:LLM", 0)
+        self.ca.set_pv_value("CURRENT:SP", max_current)
+        self.ca.set_pv_value("VOLT:SP", max_volt)
+        self.ca.assert_that_pv_is("CURR:LIMIT", 1)
+        self.ca.assert_that_pv_is("VOLT:LIMIT", 1)
+        self.ca.assert_that_pv_is("LIMIT", 3)
+        self.ca.assert_that_pv_is("LIMIT:ENUM", "BOTH LIMITS")
+
 
     @skip_if_recsim("Cannot catch errors in RECSIM")
     def test_WHEN_set_current_THEN_get_current_back_correctly(self):
