@@ -43,8 +43,8 @@ record(ai, "$(P)VOLT") {
    field(PREC, "3")
    field(HIGH, "$(MAX_VOLT)")
    field(LOW, 0)
-   field(HSV, "$(LIMIT_ALARM=NO_ALARM)")
-   field(LSV, "$(LIMIT_ALARM=NO_ALARM)")
+   field(HSV, "$(LIMIT_ALARM)")
+   field(LSV, "$(LIMIT_ALARM)")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
@@ -93,8 +93,8 @@ record(ai, "$(P)CURRENT") {
    field(PREC, "1")
    field(HIGH, "$(MAX_CURR)")
    field(LOW, 0)
-   field(HSV, "$(LIMIT_ALARM=NO_ALARM)")
-   field(LSV, "$(LIMIT_ALARM=NO_ALARM)")
+   field(HSV, "$(LIMIT_ALARM)")
+   field(LSV, "$(LIMIT_ALARM)")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
