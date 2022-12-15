@@ -41,6 +41,10 @@ record(ai, "$(P)VOLT") {
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "Passive")
    field(PREC, "3")
+   field(HIGH, "$(MAX_VOLT)")
+   field(LOW, 0)
+   field(HSV, "$(LIMIT_ALARM)")
+   field(LSV, "$(LIMIT_ALARM)")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
@@ -87,6 +91,10 @@ record(ai, "$(P)CURRENT") {
    field(SDIS, "$(P)DISABLE")
    field(SCAN, "Passive")
    field(PREC, "1")
+   field(HIGH, "$(MAX_CURR)")
+   field(LOW, 0)
+   field(HSV, "$(LIMIT_ALARM)")
+   field(LSV, "$(LIMIT_ALARM)")
    info(INTEREST, "HIGH")
    info(archive, "VAL")
 }
@@ -238,12 +246,29 @@ record(bo, "$(P)SIM:HV_OFF:SP"){
 }
 record(bo, "$(P)SIM:INHIBIT:SP"){
 }
-record(bo, "$(P)LOCAL_MODE:SP"){
-}
-record(bo, "$(P)SIM:INHIBIT:SP") {
+record(bo, "$(P)SIM:LOCAL_MODE:SP"){
 }
 record(longin, "$(P)SIM:ARC"){
 }
 record(mbbiDirect, "$(P)SIM:STATUS"){
 }
 
+record(calc, "$(P)LIMIT") {
+    field(DESC, "LIMIT HIT")
+    field(CALC, "A?(B?3:1):(B?2:0)")
+    field(INPA, "$(P)VOLT.SEVR CP MSS")
+    field(INPB, "$(P)CURRENT.SEVR CP MSS")
+}
+
+record(mbbi, "$(P)LIMIT:ENUM") {
+    field(INP, "$(P)LIMIT CP MSI")
+    field(DESC, "Display Limit")
+    field(ZRST, "No")        
+    field(ZRVL, "0")
+    field(ONST, "VOLT LIMIT")         
+    field(ONVL, "1")
+    field(TWST, "CURR LIMIT")         
+    field(TWVL, "2")
+    field(THST, "BOTH LIMITS")       
+    field(THVL, "3")
+}
