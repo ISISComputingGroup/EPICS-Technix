@@ -24,6 +24,7 @@ record(ao, "$(P)VOLT:SP") {
    field(SIOL, "$(P)SIM:VOLT:SP")
    field(SDIS, "$(P)DISABLE")
    field(PREC, "3")
+   info(autosaveFields, "VAL")
 }
 
 alias("$(P)VOLT:SP","$(P)VOLT:SP:RBV")
@@ -62,6 +63,7 @@ record(ao, "$(P)CURRENT:SP") {
    field(SIOL, "$(P)SIM:CURRENT:SP")
    field(SDIS, "$(P)DISABLE")
    field(PREC, "3")
+   info(autosaveFields, "VAL")
 }
 
 alias("$(P)CURRENT:SP","$(P)CURRENT:SP:RBV")
