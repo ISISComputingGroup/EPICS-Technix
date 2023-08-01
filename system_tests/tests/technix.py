@@ -145,7 +145,7 @@ class TechnixTests(unittest.TestCase):
 
     @parameterized.expand(parameterized_list([
         "VOLT", "CURRENT", "HV:STATUS", "LOCAL_MODE",
-        "INTERLOCK", "FAULT", "INHIBIT", "ARC", "VOLT_CURR_REG"
+        "INTERLOCK", "FAULT", "INHIBIT", "ARC", "REGULATION"
     ]))
     @skip_if_recsim("Need emulator to test disconnected behaviour")
     def test_WHEN_device_disconnected_THEN_records_are_in_alarm(self, _, record):
