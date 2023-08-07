@@ -94,7 +94,7 @@ record(ai, "$(P)CURRENT") {
     field(SIOL, "$(P)SIM:CURRENT")
     field(SDIS, "$(P)DISABLE")
     field(SCAN, "Passive")
-    field(PREC, "1")
+    field(PREC, "3")
     field(HIGH, "$(MAX_CURR)")
     field(LOW, 0)
     field(HSV, "$(LIMIT_ALARM)")
