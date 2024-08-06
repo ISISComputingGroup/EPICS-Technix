@@ -1,6 +1,6 @@
-from lewis.adapters.stream import StreamInterface, Cmd
-from lewis.utils.command_builder import CmdBuilder
+from lewis.adapters.stream import StreamInterface
 from lewis.core.logging import has_log
+from lewis.utils.command_builder import CmdBuilder
 from lewis.utils.replies import conditional_reply
 
 
@@ -17,7 +17,6 @@ class TechnixStreamInterface(StreamInterface):
         CmdBuilder("set_inhibit").escape("P8,").int().eos().build(),
         CmdBuilder("get_mains").escape("F").eos().build(),
         CmdBuilder("get_status").escape("E").eos().build(),
-
     }
 
     in_terminator = "\r"
@@ -88,8 +87,13 @@ class TechnixStreamInterface(StreamInterface):
 
     @conditional_reply("connected")
     def get_status(self):
-
-        status = (self.device.fault_status * 2) + (self.device.interlock * 4) + (self.device.hv_status * 8) + (self.device.local_mode * 64) + (self.device.inhibit * 128)
+        status = (
+            (self.device.fault_status * 2)
+            + (self.device.interlock * 4)
+            + (self.device.hv_status * 8)
+            + (self.device.local_mode * 64)
+            + (self.device.inhibit * 128)
+        )
         return f"E{status}"
 
     def handle_error(self, request, error):
