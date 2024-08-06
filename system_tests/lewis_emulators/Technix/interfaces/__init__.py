@@ -1,3 +1,3 @@
 from .stream_interface import TechnixStreamInterface
 
-__all__ = ['TechnixStreamInterface']
+__all__ = ["TechnixStreamInterface"]

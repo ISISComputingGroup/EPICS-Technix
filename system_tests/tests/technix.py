@@ -16,10 +16,9 @@ IOCS = [
             # 150kV, 4mA is realistic for real hardware
             "MAX_VOLT": "150",
             "MAX_CURR": "4",
-            "LIMIT_ALARM": "MAJOR"
+            "LIMIT_ALARM": "MAJOR",
         },
         "emulator": "Technix",
-
     },
 ]
 
@@ -29,6 +28,7 @@ IOCS = [
 #       Useful functions to run tests
 #
 ##############################################
+
 
 def _set_local_mode(ca, mode):
     ca.set_pv_value("LOCAL_MODE:SP", mode)
@@ -61,20 +61,24 @@ class TechnixTests(unittest.TestCase):
         self.ca.assert_that_pv_is_number("VOLT", max_volt, tolerance=0.1)
         # as we have set max voltage, ADC should be full range
         self.ca.assert_that_pv_is("_VRAW.RVAL", 4095)
-    
-    @parameterized.expand([
-        ("current_within_limits", 1, 0.5,  0, "CURRENT", "No"),
-        ("current_outside_limits", 0.5, 1,  2,"CURRENT", "CURR LIMIT"),
-        ("volt_within_limits", 1, 0.5,  0, "VOLT", "No"),
-        ("volt_outside_limits", 0.5, 1,  1,"VOLT", "VOLT LIMIT"),
-    ])
+
+    @parameterized.expand(
+        [
+            ("current_within_limits", 1, 0.5, 0, "CURRENT", "No"),
+            ("current_outside_limits", 0.5, 1, 2, "CURRENT", "CURR LIMIT"),
+            ("volt_within_limits", 1, 0.5, 0, "VOLT", "No"),
+            ("volt_outside_limits", 0.5, 1, 1, "VOLT", "VOLT LIMIT"),
+        ]
+    )
     @skip_if_recsim("Cannot catch errors in RECSIM")
-    def test_WHEN_setpoint_set_AND_limits_set_THEN_limit_correct(self, _, limit, setpoint, summary_limit_status, current_volt, limit_enum):
+    def test_WHEN_setpoint_set_AND_limits_set_THEN_limit_correct(
+        self, _, limit, setpoint, summary_limit_status, current_volt, limit_enum
+    ):
         max = self.ca.get_pv_value(f"{current_volt}:SP.DRVH")
-        self.ca.set_pv_value(f"{current_volt}.HIGH", max*limit)
+        self.ca.set_pv_value(f"{current_volt}.HIGH", max * limit)
         self.ca.set_pv_value(f"{current_volt}.LOW", 0)
-        self.ca.set_pv_value(f"{current_volt}:SP", max*setpoint)
-        self.ca.assert_that_pv_is_number(f"{current_volt}", max*setpoint, tolerance=0.1)
+        self.ca.set_pv_value(f"{current_volt}:SP", max * setpoint)
+        self.ca.assert_that_pv_is_number(f"{current_volt}", max * setpoint, tolerance=0.1)
         self.ca.assert_that_pv_is("LIMIT", summary_limit_status)
         self.ca.assert_that_pv_is("LIMIT:ENUM", limit_enum)
 
@@ -82,15 +86,14 @@ class TechnixTests(unittest.TestCase):
     def test_WHEN_both_outside_limits_THEN_both_limit(self):
         max_current = self.ca.get_pv_value("CURRENT:SP.DRVH")
         max_volt = self.ca.get_pv_value("VOLT:SP.DRVH")
-        self.ca.set_pv_value("CURRENT.HIGH", max_current/2)
+        self.ca.set_pv_value("CURRENT.HIGH", max_current / 2)
         self.ca.set_pv_value("CURRENT.LOW", 0)
-        self.ca.set_pv_value("VOLT.HIGH", max_volt/2)
+        self.ca.set_pv_value("VOLT.HIGH", max_volt / 2)
         self.ca.set_pv_value("VOLT.LOW", 0)
         self.ca.set_pv_value("CURRENT:SP", max_current)
         self.ca.set_pv_value("VOLT:SP", max_volt)
         self.ca.assert_that_pv_is("LIMIT", 3)
         self.ca.assert_that_pv_is("LIMIT:ENUM", "BOTH LIMITS")
-
 
     @skip_if_recsim("Cannot catch errors in RECSIM")
     def test_WHEN_set_current_THEN_get_current_back_correctly(self):
@@ -131,21 +134,32 @@ class TechnixTests(unittest.TestCase):
     @skip_if_recsim("Requires lewis backdoor")
     def test_WHEN_voltage_is_set_via_backdoor_THEN_correct(self):
         # Voltage in emulator is parts per 4095 but in DB is kV
-        self._lewis.backdoor_set_on_device("voltage", int((123.456/150.)*4095))
-        self.ca.assert_that_pv_is("_VRAW", int((123.456/150.)*4095))
+        self._lewis.backdoor_set_on_device("voltage", int((123.456 / 150.0) * 4095))
+        self.ca.assert_that_pv_is("_VRAW", int((123.456 / 150.0) * 4095))
         self.ca.assert_that_pv_is_number("VOLT", 123.456, tolerance=0.1)
 
     @skip_if_recsim("Required lewis backdoor")
     def test_WHEN_current_set_via_backdoor_THEN_correct(self):
         # Current is in parts per 4095 on device but mA in DB
-        self._lewis.backdoor_set_on_device("current", int((1.23456/4.)*4095))
-        self.ca.assert_that_pv_is("_CRAW", int((1.23456/4.)*4095))
+        self._lewis.backdoor_set_on_device("current", int((1.23456 / 4.0) * 4095))
+        self.ca.assert_that_pv_is("_CRAW", int((1.23456 / 4.0) * 4095))
         self.ca.assert_that_pv_is_number("CURRENT", 1.23456, tolerance=0.001)
 
-    @parameterized.expand(parameterized_list([
-        "VOLT", "CURRENT", "HV:STATUS", "LOCAL_MODE",
-        "INTERLOCK", "FAULT", "INHIBIT", "ARC", "REGULATION"
-    ]))
+    @parameterized.expand(
+        parameterized_list(
+            [
+                "VOLT",
+                "CURRENT",
+                "HV:STATUS",
+                "LOCAL_MODE",
+                "INTERLOCK",
+                "FAULT",
+                "INHIBIT",
+                "ARC",
+                "REGULATION",
+            ]
+        )
+    )
     @skip_if_recsim("Need emulator to test disconnected behaviour")
     def test_WHEN_device_disconnected_THEN_records_are_in_alarm(self, _, record):
         self.ca.assert_that_pv_alarm_is(record, self.ca.Alarms.NONE)
