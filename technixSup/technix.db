@@ -17,6 +17,10 @@ record(ao, "$(P)VOLT:SP") {
     field(EGU, "kV")
     field(OUT, "@devTechnix.proto set_voltage $(PORT)")
     field(LINR, "LINEAR")
+    # The PSU allows for a 12-bit resolution for voltage and current. 
+    # The max unsigned value for a 12-bit integer is 4096.
+    # As such, this adjustment slope and everywhere else this value is used in the file is
+    # (SP or RBV)/(MAX_VOLT or MAX_CURR) * (1/4096).
     field(ASLO, "0.0002442")
     field(ESLO, "$(MAX_VOLT)")
     field(DRVH, "$(MAX_VOLT)")
